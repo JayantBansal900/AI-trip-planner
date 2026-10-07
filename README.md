@@ -1,198 +1,314 @@
-# PushpakUdaan
+# ✈️ PushpakUdaan
 
-> **Plan smarter. Travel better.**
+### Plan smarter. Travel better.
 
-PushpakUdaan is an AI-powered travel itinerary planner that creates personalized journeys based on your destination, duration, budget, travel companions, interests, and custom notes. Built with a travel-first design philosophy, it focuses on photography, pacing, and realistic schedules rather than generic AI dashboards.
+PushpakUdaan is an AI-powered trip planner that creates personalized travel itineraries based on a user's destination, trip duration, budget, travel group, and interests.
 
----
-
-## Features
-
-- **Personalized Trip Planning**: Configure destination, trip duration (1–10 days), budget tier (Budget, Moderate, Luxury), travel group (Solo, Couple, Family, Friends), and activity interests.
-- **Structured Gemini Itineraries**: Server-side Google Gemini integration produces reliable, validated day-by-day itineraries.
-- **Destination Discovery**: Curated guides for popular destinations (Goa, Manali, Jaipur, Bali, Paris, Tokyo) with one-click pre-fill into the planner.
-- **Hotel Suggestions**: Curated accommodation recommendations matching the chosen budget tier with estimated price ranges and neighborhood context.
-- **Day-by-Day Timeline**: Morning, afternoon, and evening activity breakdown with timing icons, location tags, descriptions, and estimated activity costs.
-- **Estimated Trip Budget**: Categorized expense breakdowns (accommodation, food, local transit, activities) with total estimates.
-- **Good to Know Travel Tips**: Practical destination advice, safety considerations, and cultural tips.
-- **Edit & Regenerate**: Refine trip preferences on the fly or regenerate with fresh suggestions.
-- **Save Trips Locally**: Bookmark generated itineraries to browser `localStorage` with duplicate prevention and instant recall.
-- **My Trips Gallery**: Responsive journal gallery of all saved journeys with instant viewing (zero API calls) and inline deletion.
-- **Responsive Travel-First UI**: Clean layout crafted for mobile (375px), tablet (768px), and desktop (1440px).
+Instead of providing a generic list of places, PushpakUdaan generates a structured day-by-day travel plan with hotel suggestions, activities, estimated expenses, and useful travel tips.
 
 ---
 
-## Tech Stack
+## ✨ Features
+
+- Personalized trip planning based on destination, duration, budget, travel group, and interests
+- AI-generated day-by-day itineraries using Google Gemini
+- Morning, afternoon, and evening activity planning
+- Hotel recommendations based on the selected budget
+- Estimated trip budget breakdown
+- Destination-specific travel tips
+- Explore popular destinations such as Goa, Manali, Jaipur, Bali, Paris, and Tokyo
+- Edit preferences and regenerate itineraries
+- Save trips directly in the browser
+- View and delete previously saved trips
+- Responsive design for mobile, tablet, and desktop
+- Secure server-side Gemini API integration
+
+---
+
+## 🛠️ Tech Stack
 
 ### Frontend
-- **React 18** (Functional components, custom state management)
-- **Vite** (Build tooling and fast development)
-- **Tailwind CSS** (Utility-first responsive styling)
-- **Shadcn UI** & **Lucide React** (Accessible component primitives and travel iconography)
+
+- React 18
+- JavaScript
+- Vite
+- Tailwind CSS
+- Shadcn UI
+- Lucide React
 
 ### Backend
-- **Node.js** & **Express**
-- Server-side proxy protecting the AI credentials
-- Vite middleware integration in development; static build serving in production
 
-### AI Integration
-- **Google Gemini** via the modern `@google/genai` SDK
-- Model: `gemini-3.8-flash` with resilient sequential fallback
-- Strict JSON schema enforcement for predictable itinerary data
+- Node.js
+- Express.js
+
+### AI
+
+- Google Gemini API
+- `@google/genai`
 
 ### Storage
-- **Browser localStorage** (`pushpakudaan_saved_trips`) for persistence without requiring authentication or external databases
+
+- Browser LocalStorage
+
+### Development Tools
+
+- npm
+- ESLint
+- Git & GitHub
 
 ---
 
-## How It Works
+## ⚙️ How It Works
 
 ```text
-User Preferences (Destination, Days, Budget, Group, Interests)
-                            ↓
-             Interactive Trip Planner Form
-                            ↓
-         POST /api/itinerary/generate (Express)
-                            ↓
-               Google Gemini API (@google/genai)
-                            ↓
-          Validated Structured Itinerary (JSON)
-                            ↓
-             Travel-First Trip Result View
-                            ↓
-       Optional One-Click Save (localStorage)
-                            ↓
-             My Trips Gallery (Instant Recall)
+User enters trip preferences
+        ↓
+React Trip Planner
+        ↓
+POST /api/itinerary/generate
+        ↓
+Express Backend
+        ↓
+Google Gemini API
+        ↓
+Structured itinerary response
+        ↓
+Trip Result Page
+        ↓
+Optional Save to LocalStorage
+        ↓
+My Trips
+```
+
+The Gemini API key is handled only by the backend and is never exposed to the React frontend.
+
+---
+
+## 📁 Project Structure
+
+```text
+AI-trip-planner/
+│
+├── public/
+│
+├── src/
+│   ├── assets/
+│   │   └── images/
+│   │
+│   ├── components/
+│   │   ├── itinerary/
+│   │   │   ├── BudgetBreakdown.jsx
+│   │   │   ├── DayItinerary.jsx
+│   │   │   └── HotelCard.jsx
+│   │   │
+│   │   ├── ui/
+│   │   │   └── button.jsx
+│   │   │
+│   │   ├── BrandLogo.jsx
+│   │   ├── DestinationCard.jsx
+│   │   ├── Footer.jsx
+│   │   ├── Navbar.jsx
+│   │   └── SavedTripCard.jsx
+│   │
+│   ├── data/
+│   │   └── destinations.js
+│   │
+│   ├── pages/
+│   │   ├── Explore.jsx
+│   │   ├── Home.jsx
+│   │   ├── MyTrips.jsx
+│   │   ├── PlanTrip.jsx
+│   │   └── TripResult.jsx
+│   │
+│   ├── services/
+│   │   ├── tripService.js
+│   │   └── tripStorageService.js
+│   │
+│   ├── App.jsx
+│   ├── index.css
+│   └── main.jsx
+│
+├── .env.example
+├── .gitignore
+├── index.html
+├── package.json
+├── server.js
+├── tailwind.config.js
+└── vite.config.js
 ```
 
 ---
 
-## Project Structure
-
-```text
-├── index.html                      # HTML entry point with metadata
-├── server.js                       # Express server + Gemini AI endpoint
-├── package.json                    # Project dependencies and scripts
-├── .env.example                    # Environment variable template
-├── public/                         # Public static assets
-└── src/
-    ├── main.jsx                    # React entry point
-    ├── App.jsx                     # Top-level state and view controller
-    ├── index.css                   # Tailwind styles and design tokens
-    ├── assets/images/              # High-resolution destination photography
-    ├── components/
-    │   ├── Navbar.jsx              # Responsive navigation header
-    │   ├── Footer.jsx              # Application footer
-    │   ├── SavedTripCard.jsx       # Saved trip gallery card with inline delete
-    │   ├── itinerary/
-    │   │   ├── HotelCard.jsx       # Curated stay recommendations
-    │   │   ├── DayItinerary.jsx    # Chronological activity timeline
-    │   │   └── BudgetBreakdown.jsx # Itemized expense estimates
-    │   └── ui/
-    │       └── button.jsx          # Reusable button component
-    ├── data/
-    │   └── destinations.js         # Curated destinations and photo mapping
-    ├── pages/
-    │   ├── Home.jsx                # Travel-first hero & popular destinations
-    │   ├── Explore.jsx             # Destination discovery grid
-    │   ├── PlanTrip.jsx            # Interactive preference form & loading states
-    │   ├── TripResult.jsx          # Digital itinerary guide with day tabs & actions
-    │   └── MyTrips.jsx             # Saved trips gallery and empty states
-    └── services/
-        ├── tripService.js          # API client for /api/itinerary/generate
-        └── tripStorageService.js   # Safe browser localStorage persistence
-```
-
----
-
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
-- [Node.js](https://nodejs.org/) (version 18 or higher recommended)
-- `npm` (bundled with Node.js)
-- A Google Gemini API key from [Google AI Studio](https://aistudio.google.com/)
 
-### Installation
+Make sure you have installed:
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/JayantBansal900/AI-trip-planner.git
-   cd AI-trip-planner
-   ```
+- Node.js 18 or later
+- npm
+- A Google Gemini API key
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+---
 
-3. Set up environment variables:
-   Copy the example environment file and add your Gemini API key:
-   ```bash
-   cp .env.example .env
-   ```
-   Open `.env` and set:
-   ```env
-   GEMINI_API_KEY=your_actual_gemini_api_key_here
-   ```
-   > **Note:** Never commit the `.env` file to version control. It is already ignored in `.gitignore`.
+### 1. Clone the Repository
 
-### Development Server
+```bash
+git clone https://github.com/JayantBansal900/AI-trip-planner.git
+cd AI-trip-planner
+```
 
-Start the full-stack development server:
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure Environment Variables
+
+Create a `.env` file from the provided example.
+
+**Windows PowerShell**
+
+```powershell
+Copy-Item .env.example .env
+```
+
+**macOS / Linux**
+
+```bash
+cp .env.example .env
+```
+
+Add your Gemini API key:
+
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
+```
+
+> Never commit your `.env` file or API key to GitHub.
+
+### 4. Start the Development Server
+
 ```bash
 npm run dev
 ```
-Open `http://localhost:3000` in your browser. The server runs Express with Vite middleware mounted for hot development.
 
-### Production Build & Execution
+Open:
 
-To test the compiled production build:
+```text
+http://localhost:3000
+```
+
+---
+
+## 📦 Production Build
+
+Create the optimized frontend build:
+
 ```bash
 npm run build
+```
+
+Start the application:
+
+```bash
 npm start
 ```
-The server will bind to `process.env.PORT` or port `3000` and serve the optimized static frontend alongside the API.
+
+The Express server serves both the production frontend and the itinerary API.
 
 ---
 
-## Screenshots
+## 💾 Saving Trips
 
-> *Screenshots can be added here showing the Homepage, Interactive Trip Planner, Generated Itinerary View, and Saved Trips Gallery.*
+PushpakUdaan uses browser `localStorage` to save generated itineraries.
 
----
+This keeps the project simple and removes the need for authentication or a database.
 
-## Engineering Decisions & Interview Notes
+Saved trips can be:
 
-### Why a Server-Side Proxy for Gemini?
-Direct client-side API calls expose the `GEMINI_API_KEY` in network requests and client bundles. By routing generation requests through an Express endpoint (`/api/itinerary/generate`), API keys stay on the server, input validation is enforced before calling the LLM, and structured JSON schemas ensure predictable output.
+- viewed instantly without calling Gemini again
+- reopened after refreshing the browser
+- deleted from the My Trips page
 
-### Why LocalStorage for Persistence?
-PushpakUdaan is designed to be an easy-to-run, zero-friction travel planner. Storing saved trips in browser `localStorage` allows users to save, review, and delete itineraries across reloads without requiring user authentication, database configuration, or backend hosting complexity.
-
-### Performance & Pacing
-Opening a saved itinerary from My Trips reads directly from `localStorage` in memory and skips the AI model entirely, delivering instantaneous page transitions without network latency.
+Because the data is stored locally, saved trips do not sync between devices or browsers.
 
 ---
 
-## Security
+## 🔐 Security
 
-- **Server-Side API Key**: The `GEMINI_API_KEY` is loaded in `server.js` and never sent to the browser or stored in `localStorage`.
-- **Environment Isolation**: `.env` and local secrets are excluded from Git via `.gitignore`.
-- **Input Sanitization**: Request parameters (destination length, duration bounds, budget, group) are validated prior to invoking the AI SDK.
+The Gemini API key is never included in the frontend application.
+
+All AI requests follow this architecture:
+
+```text
+React Frontend
+      ↓
+Express Backend
+      ↓
+Gemini API
+```
+
+The API key is stored as an environment variable:
+
+```env
+GEMINI_API_KEY=...
+```
+
+The `.env` file is excluded from Git using `.gitignore`.
 
 ---
 
-## Limitations
+## 📸 Screenshots
 
-- **Estimated Pricing**: Accommodation rates and activity costs are AI-generated approximations based on general travel data, not live booking inventory.
-- **Offline Sync**: Saved trips are stored locally in the user's browser and do not sync across different browsers or devices.
-- **Travel Verification**: Visa requirements, opening hours, and transport schedules should be confirmed with official sources before travel.
+### Home Page
+
+_Add screenshot here_
+
+### Trip Planner
+
+_Add screenshot here_
+
+### Generated Itinerary
+
+_Add screenshot here_
+
+### My Trips
+
+_Add screenshot here_
 
 ---
 
-## Future Improvements
+## ⚠️ Limitations
 
-- User authentication for multi-device synchronization
-- Interactive map views for daily routes
-- Real-time weather and seasonal packing advice
-- Itinerary export to PDF and calendar integration
+- Hotel and activity prices are estimates and not live booking prices.
+- Saved trips are stored only in the current browser.
+- The application does not currently include user accounts.
+- Flight and hotel bookings are not performed through the application.
+- Travel information such as visa rules, opening hours, and transportation schedules should be verified before travelling.
+
+---
+
+## 🔮 Future Improvements
+
+- User authentication and cloud-synced trips
+- Interactive maps for itinerary locations
+- Real-time weather information
+- Live hotel and flight data
+- PDF itinerary export
+- Calendar integration
+
+---
+
+## 👨‍💻 Author
+
+**Jayant Bansal**
+
+Built as a full-stack project exploring React, Node.js, Express, and Generative AI integration.
+
+---
+
+## ⭐ Support
+
+If you found this project useful, consider giving the repository a star.

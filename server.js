@@ -238,9 +238,9 @@ async function startServer() {
     })
   }
 
-  app.listen(PORT, HOST, () => {
-    console.log(`[PushpakUdaan] Server running at http://${HOST}:${PORT}`)
-  })
+  app.listen(PORT, "0.0.0.0", () => {
+  console.log(`[PushpakUdaan] Server running at http://localhost:${PORT}`);
+});
 }
 
 startServer()
