@@ -1,7 +1,12 @@
+import tailwindcssAnimate from "tailwindcss-animate"
+
 /** @type {import('tailwindcss').Config} */
 export default {
     darkMode: ["class"],
-    content: [],
+    content: [
+      "./index.html",
+      "./src/**/*.{js,ts,jsx,tsx}",
+    ],
   theme: {
   	extend: {
   		borderRadius: {
@@ -43,16 +48,26 @@ export default {
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
-  			chart: {
-  				'1': 'hsl(var(--chart-1))',
-  				'2': 'hsl(var(--chart-2))',
-  				'3': 'hsl(var(--chart-3))',
-  				'4': 'hsl(var(--chart-4))',
-  				'5': 'hsl(var(--chart-5))'
+  			navy: {
+  				DEFAULT: '#0f172a',
+  				dark: '#080e1a',
+  				surface: '#1e293b',
+  				accent: '#1e3a8a'
+  			},
+  			saffron: {
+  				DEFAULT: '#f97316',
+  				light: '#fff7ed',
+  				hover: '#ea580c',
+  				dark: '#c2410c'
+  			},
+  			cream: {
+  				DEFAULT: '#faf8f5',
+  				surface: '#f5f2eb',
+  				muted: '#eee9de'
   			}
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindcssAnimate],
 }
 
