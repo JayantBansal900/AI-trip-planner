@@ -1,0 +1,7 @@
+{
+  "name": "PushpakUdaan",
+  "description": "Plan smarter. Travel better. AI-powered travel itineraries tailored to your preferences, budget, and travel style.",
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
