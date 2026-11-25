@@ -1,4 +1,5 @@
 # ✈️ PushpakUdaan
+[![CI](https://github.com/JayantBansal900/AI-trip-planner/actions/workflows/ci.yml/badge.svg)](https://github.com/JayantBansal900/AI-trip-planner/actions/workflows/ci.yml)
 
 ### Plan smarter. Travel better.
 
