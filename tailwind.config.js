@@ -9,6 +9,20 @@ export default {
     ],
   theme: {
   	extend: {
+  		// v4-style sizes used across the components (not in Tailwind v3 by default)
+  		boxShadow: {
+  			xs: '0 1px 2px 0 rgb(0 0 0 / 0.05)'
+  		},
+  		dropShadow: {
+  			xs: '0 1px 1px rgb(0 0 0 / 0.05)'
+  		},
+  		backdropBlur: {
+  			xs: '2px'
+  		},
+  		transitionDuration: {
+  			'1200': '1200ms',
+  			'6000': '6000ms'
+  		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',

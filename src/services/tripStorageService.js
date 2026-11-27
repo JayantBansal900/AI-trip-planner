@@ -44,6 +44,11 @@ export function saveTrip(preferences, itinerary) {
 
   try {
     const existing = getSavedTrips()
+
+    // Don't store the same itinerary twice
+    const duplicate = findSavedTripByItinerary(itinerary, existing)
+    if (duplicate) return duplicate
+
     const id = generateUniqueId()
     const savedAt = new Date().toISOString()
 
@@ -106,4 +111,17 @@ export function isTripSaved(id) {
   if (!id) return false
   const trips = getSavedTrips()
   return trips.some((t) => t.id === id)
+}
+
+/**
+ * Find a saved trip whose itinerary content is identical to the given one.
+ */
+export function findSavedTripByItinerary(itinerary, trips = getSavedTrips()) {
+  if (!itinerary) return null
+  try {
+    const target = JSON.stringify(itinerary)
+    return trips.find((t) => JSON.stringify(t.itinerary) === target) || null
+  } catch {
+    return null
+  }
 }

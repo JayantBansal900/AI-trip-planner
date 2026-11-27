@@ -1,4 +1,5 @@
 # ✈️ PushpakUdaan
+
 [![CI](https://github.com/JayantBansal900/AI-trip-planner/actions/workflows/ci.yml/badge.svg)](https://github.com/JayantBansal900/AI-trip-planner/actions/workflows/ci.yml)
 
 ### Plan smarter. Travel better.
@@ -22,7 +23,8 @@ Instead of providing a generic list of places, PushpakUdaan generates a structur
 - Save trips directly in the browser
 - View and delete previously saved trips
 - Responsive design for mobile, tablet, and desktop
-- Secure server-side Gemini API integration
+- Secure server-side Gemini API integration with input validation and rate limiting
+- Automatic fallback between Gemini models
 
 ---
 
@@ -90,7 +92,15 @@ The Gemini API key is handled only by the backend and is never exposed to the Re
 ```text
 AI-trip-planner/
 │
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+│
+├── docs/
+│   └── screenshots/
+│
 ├── public/
+│   └── favicon.svg
 │
 ├── src/
 │   ├── assets/
@@ -103,7 +113,8 @@ AI-trip-planner/
 │   │   │   └── HotelCard.jsx
 │   │   │
 │   │   ├── ui/
-│   │   │   └── button.jsx
+│   │   │   ├── button.jsx
+│   │   │   └── button-variants.js
 │   │   │
 │   │   ├── BrandLogo.jsx
 │   │   ├── DestinationCard.jsx
@@ -113,6 +124,9 @@ AI-trip-planner/
 │   │
 │   ├── data/
 │   │   └── destinations.js
+│   │
+│   ├── lib/
+│   │   └── utils.js
 │   │
 │   ├── pages/
 │   │   ├── Explore.jsx
@@ -131,6 +145,7 @@ AI-trip-planner/
 │
 ├── .env.example
 ├── .gitignore
+├── LICENSE
 ├── index.html
 ├── package.json
 ├── server.js
@@ -146,7 +161,7 @@ AI-trip-planner/
 
 Make sure you have installed:
 
-- Node.js 18 or later
+- Node.js 20.12 or later
 - npm
 - A Google Gemini API key
 
@@ -189,6 +204,14 @@ GEMINI_API_KEY=your_gemini_api_key_here
 
 > Never commit your `.env` file or API key to GitHub.
 
+Optional settings (also listed in `.env.example`):
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `GEMINI_MODEL` | `gemini-flash-latest,gemini-flash-lite-latest` | Comma-separated Gemini models, tried in order |
+| `RATE_LIMIT_PER_MINUTE` | `5` | Max trip requests per IP address per minute |
+| `PORT` | `3000` | Server port |
+
 ### 4. Start the Development Server
 
 ```bash
@@ -217,7 +240,7 @@ Start the application:
 npm start
 ```
 
-The Express server serves both the production frontend and the itinerary API.
+`npm start` runs the Express server in production mode, serving both the built frontend from `dist/` and the itinerary API.
 
 ---
 
@@ -259,25 +282,27 @@ GEMINI_API_KEY=...
 
 The `.env` file is excluded from Git using `.gitignore`.
 
+The API also:
+
+- accepts only the budget, travel group and interest options offered in the form
+- limits each IP address to a few trip requests per minute to protect the Gemini quota
+- checks the AI response and retries with the next model if it is incomplete
+
 ---
 
 ## 📸 Screenshots
 
 ### Home Page
 
-_Add screenshot here_
+![Home page](docs/screenshots/home.jpg)
 
 ### Trip Planner
 
-_Add screenshot here_
+![Trip planner form](docs/screenshots/plan-trip.jpg)
 
-### Generated Itinerary
+### Explore Destinations
 
-_Add screenshot here_
-
-### My Trips
-
-_Add screenshot here_
+![Explore destinations](docs/screenshots/explore.jpg)
 
 ---
 
@@ -313,3 +338,9 @@ Built as a full-stack project exploring React, Node.js, Express, and Generative 
 ## ⭐ Support
 
 If you found this project useful, consider giving the repository a star.
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).

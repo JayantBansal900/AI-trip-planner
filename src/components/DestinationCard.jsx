@@ -5,8 +5,17 @@ export function DestinationCard({ destination, onSelect }) {
 
   return (
     <div
+      role="button"
+      tabIndex={0}
       onClick={() => onSelect(destination.name)}
-      className="group relative flex flex-col cursor-pointer overflow-hidden rounded-2xl border border-stone-200/80 bg-white shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-teal-700/40 hover:shadow-md"
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          onSelect(destination.name)
+        }
+      }}
+      aria-label={`Plan a trip to ${destination.name}`}
+      className="group relative flex w-full flex-col text-left cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2 overflow-hidden rounded-2xl border border-stone-200/80 bg-white shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-teal-700/40 hover:shadow-md"
     >
       {/* Single Calm Photographic Image Container */}
       <div className="relative h-56 w-full overflow-hidden bg-stone-900 sm:h-64">
