@@ -96,9 +96,6 @@ AI-trip-planner/
 │   └── workflows/
 │       └── ci.yml
 │
-├── docs/
-│   └── screenshots/
-│
 ├── public/
 │   └── favicon.svg
 │
@@ -287,22 +284,6 @@ The API also:
 - accepts only the budget, travel group and interest options offered in the form
 - limits each IP address to a few trip requests per minute to protect the Gemini quota
 - checks the AI response and retries with the next model if it is incomplete
-
----
-
-## 📸 Screenshots
-
-### Home Page
-
-![Home page](docs/screenshots/home.jpg)
-
-### Trip Planner
-
-![Trip planner form](docs/screenshots/plan-trip.jpg)
-
-### Explore Destinations
-
-![Explore destinations](docs/screenshots/explore.jpg)
 
 ---
 
