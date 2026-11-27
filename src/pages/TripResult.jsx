@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import {
   Calendar,
   Wallet,
@@ -17,7 +17,7 @@ import { HotelCard } from '../components/itinerary/HotelCard'
 import { DayItinerary } from '../components/itinerary/DayItinerary'
 import { BudgetBreakdown } from '../components/itinerary/BudgetBreakdown'
 import { getDestinationImage } from '../data/destinations'
-import { saveTrip } from '../services/tripStorageService'
+import { saveTrip, findSavedTripByItinerary } from '../services/tripStorageService'
 
 export function TripResult({
   trip,
@@ -30,19 +30,24 @@ export function TripResult({
   onBackToMyTrips,
 }) {
   const [selectedDayFilter, setSelectedDayFilter] = useState('all')
-  const [isSaved, setIsSaved] = useState(Boolean(isSavedTrip || savedTripId))
-  const [saveSuccessMessage, setSaveSuccessMessage] = useState(
-    isSavedTrip || savedTripId ? 'Saved' : ''
+  const alreadySaved = () =>
+    Boolean(isSavedTrip || savedTripId || findSavedTripByItinerary(trip))
+  const [isSaved, setIsSaved] = useState(alreadySaved)
+  const [saveSuccessMessage, setSaveSuccessMessage] = useState(() =>
+    alreadySaved() ? 'Saved' : ''
   )
   const [saveErrorMessage, setSaveErrorMessage] = useState('')
+  const saveTimerRef = useRef(null)
 
   useEffect(() => {
-    if (!isSavedTrip && !savedTripId) {
-      setIsSaved(false)
-      setSaveSuccessMessage('')
-      setSaveErrorMessage('')
-    }
+    const saved = Boolean(isSavedTrip || savedTripId || findSavedTripByItinerary(trip))
+    setIsSaved(saved)
+    setSaveSuccessMessage(saved ? 'Saved' : '')
+    setSaveErrorMessage('')
+    setSelectedDayFilter('all')
   }, [trip, isSavedTrip, savedTripId])
+
+  useEffect(() => () => clearTimeout(saveTimerRef.current), [])
 
   if (!trip) return null
 
@@ -52,6 +57,8 @@ export function TripResult({
   const hotels = Array.isArray(trip.hotels) ? trip.hotels : []
   const travelTips = Array.isArray(trip.travelTips) ? trip.travelTips : []
   const interests = preferences?.interests || []
+  const budgetLabel = trip.budget || preferences?.budget || 'Moderate'
+  const groupLabel = trip.travelGroup || preferences?.travelGroup || 'Solo'
 
   const handleSaveTrip = () => {
     if (isSaved) return
@@ -62,7 +69,8 @@ export function TripResult({
       if (saved) {
         setIsSaved(true)
         setSaveSuccessMessage('Trip saved')
-        setTimeout(() => setSaveSuccessMessage('Saved'), 2500)
+        clearTimeout(saveTimerRef.current)
+        saveTimerRef.current = setTimeout(() => setSaveSuccessMessage('Saved'), 2500)
       } else {
         setSaveErrorMessage("We couldn't save this trip. Please try again.")
       }
@@ -105,7 +113,7 @@ export function TripResult({
             <span>&bull;</span>
             <span>{durationDays} Days</span>
             <span>&bull;</span>
-            <span>{trip.budget}</span>
+            <span>{budgetLabel}</span>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
@@ -198,11 +206,11 @@ export function TripResult({
                 </div>
                 <div className="flex items-center gap-2">
                   <Wallet className="h-4 w-4 text-teal-700" />
-                  <span className="font-semibold text-slate-900">{trip.budget} Budget</span>
+                  <span className="font-semibold text-slate-900">{budgetLabel} Budget</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Users className="h-4 w-4 text-teal-700" />
-                  <span className="font-semibold text-slate-900">{trip.travelGroup}</span>
+                  <span className="font-semibold text-slate-900">{groupLabel}</span>
                 </div>
               </div>
 
@@ -237,7 +245,7 @@ export function TripResult({
         </section>
 
         {/* In-Page Navigation Bar */}
-        <div className="sticky top-0 z-10 mt-8 rounded-2xl border border-slate-200/90 bg-white/95 p-2 shadow-xs backdrop-blur-sm">
+        <div className="sticky top-16 z-30 mt-8 rounded-2xl border border-slate-200/90 bg-white/95 p-2 shadow-xs backdrop-blur-sm">
           <div className="flex items-center gap-1 overflow-x-auto text-xs sm:text-sm scrollbar-none">
             <button
               onClick={() => scrollToSection('hotels-section')}
@@ -270,13 +278,13 @@ export function TripResult({
 
         {/* Section 1: Where to Stay */}
         {hotels.length > 0 && (
-          <section id="hotels-section" className="mt-12 scroll-mt-20">
+          <section id="hotels-section" className="mt-12 scroll-mt-36">
             <div className="mb-6">
               <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
                 Where to stay
               </h2>
               <p className="mt-1 text-sm text-slate-600">
-                Recommended stays matching your {trip.budget.toLowerCase()} budget tier in {trip.destination}.
+                Recommended stays matching your {budgetLabel.toLowerCase()} budget tier in {trip.destination}.
               </p>
             </div>
 
@@ -289,7 +297,7 @@ export function TripResult({
         )}
 
         {/* Section 2: Day-by-Day Itinerary */}
-        <section id="itinerary-section" className="mt-14 scroll-mt-20">
+        <section id="itinerary-section" className="mt-14 scroll-mt-36">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
@@ -347,13 +355,13 @@ export function TripResult({
 
         {/* Section 3: Budget Breakdown */}
         {trip.estimatedBudget && (
-          <section id="budget-section" className="mt-14 scroll-mt-20">
+          <section id="budget-section" className="mt-14 scroll-mt-36">
             <div className="mb-6">
               <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
                 Estimated trip budget
               </h2>
               <p className="mt-1 text-sm text-slate-600">
-                Category estimates calculated for a {durationDays}-day trip with {trip.travelGroup}.
+                Category estimates calculated for a {durationDays}-day trip with {groupLabel}.
               </p>
             </div>
 
@@ -363,7 +371,7 @@ export function TripResult({
 
         {/* Section 4: Travel Tips */}
         {travelTips.length > 0 && (
-          <section id="tips-section" className="mt-14 scroll-mt-20">
+          <section id="tips-section" className="mt-14 scroll-mt-36">
             <div className="mb-6">
               <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
                 Good to know

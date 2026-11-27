@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Navbar } from './components/Navbar'
 import { Footer } from './components/Footer'
 import { Home } from './pages/Home'
@@ -12,14 +12,17 @@ function App() {
   const [currentView, setCurrentView] = useState('home')
   const [selectedDestination, setSelectedDestination] = useState('')
 
-  // Phase 3 & 4 App-level states for trip generation
+  // Trip generation state
   const [tripPreferences, setTripPreferences] = useState(null)
   const [generatedTrip, setGeneratedTrip] = useState(null)
   const [isGenerating, setIsGenerating] = useState(false)
   const [generationError, setGenerationError] = useState(null)
 
-  // Phase 5 App-level state for viewing a saved trip from localStorage
+  // Saved trip currently being viewed (from localStorage)
   const [viewingSavedTrip, setViewingSavedTrip] = useState(null)
+
+  // Increments for every new request so late responses from old requests are ignored
+  const requestIdRef = useRef(0)
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -27,7 +30,13 @@ function App() {
 
   const handleNavigate = (view, destination = '') => {
     if (view === 'plan-trip' && destination) {
+      // A new destination starts a fresh plan: drop the old result and any pending request
+      requestIdRef.current += 1
       setSelectedDestination(destination)
+      setTripPreferences((prev) => (prev ? { ...prev, destination } : null))
+      setGeneratedTrip(null)
+      setGenerationError(null)
+      setIsGenerating(false)
     }
     setViewingSavedTrip(null)
     setCurrentView(view)
@@ -39,17 +48,21 @@ function App() {
   }
 
   const handleGenerateTrip = async (preferences) => {
+    const requestId = ++requestIdRef.current
     setTripPreferences(preferences)
+    setGeneratedTrip(null)
     setIsGenerating(true)
     setGenerationError(null)
 
     try {
       const trip = await generateItinerary(preferences)
+      if (requestId !== requestIdRef.current) return
       setGeneratedTrip(trip)
     } catch (err) {
+      if (requestId !== requestIdRef.current) return
       setGenerationError(err.message || "We couldn't create your trip right now. Please try again.")
     } finally {
-      setIsGenerating(false)
+      if (requestId === requestIdRef.current) setIsGenerating(false)
     }
   }
 
@@ -66,6 +79,8 @@ function App() {
   }
 
   const handleResetAll = () => {
+    requestIdRef.current += 1
+    setIsGenerating(false)
     setTripPreferences(null)
     setGeneratedTrip(null)
     setGenerationError(null)

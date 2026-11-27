@@ -249,7 +249,7 @@ export function PlanTrip({
             We couldn&apos;t plan this trip
           </h2>
           <p className="mt-2 text-sm text-stone-600 leading-relaxed">
-            Something went wrong while creating your itinerary. Please try again.
+            {generationError || 'Something went wrong while creating your itinerary. Please try again.'}
           </p>
 
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
@@ -274,7 +274,7 @@ export function PlanTrip({
     )
   }
 
-  // 3. Generated Trip Result View (Phase 4 Final Travel Itinerary Experience)
+  // 3. Generated Trip Result View 
   if (generatedTrip) {
     return (
       <TripResult

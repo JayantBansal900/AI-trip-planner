@@ -1,20 +1,20 @@
 // Primary Hero & Destination Photographs
-import hero1Mountain from '../assets/images/hero_travel_mountain_1791321293656.jpg'
-import hero2Beach from '../assets/images/hero_2_beach.jpg'
-import hero3Palace from '../assets/images/hero_3_palace.jpg'
-import hero4Europe from '../assets/images/hero_4_europe.jpg'
-import hero5Greenery from '../assets/images/hero_5_greenery.jpg'
-import hero6Shrine from '../assets/images/hero_6_shrine.jpg'
-import hero7Lake from '../assets/images/hero_7_lake.jpg'
-import hero8Sunset from '../assets/images/hero_8_sunset.jpg'
+import hero1Mountain from '../assets/images/hero_travel_mountain.webp'
+import hero2Beach from '../assets/images/hero_2_beach.webp'
+import hero3Palace from '../assets/images/hero_3_palace.webp'
+import hero4Europe from '../assets/images/hero_4_europe.webp'
+import hero5Greenery from '../assets/images/hero_5_greenery.webp'
+import hero6Shrine from '../assets/images/hero_6_shrine.webp'
+import hero7Lake from '../assets/images/hero_7_lake.webp'
+import hero8Sunset from '../assets/images/hero_8_sunset.webp'
 
 // Authentic Single High-Quality Destination Images
-import goaImage from '../assets/images/dest_goa_beach_1791321310164.jpg'
-import manaliImage from '../assets/images/dest_manali_mountain_1791321327088.jpg'
-import jaipurImage from '../assets/images/dest_jaipur_palace_1791321340574.jpg'
-import baliImage from '../assets/images/dest_bali_terrace_1791321355031.jpg'
-import parisImage from '../assets/images/dest_paris_city_1791321375671.jpg'
-import tokyoImage from '../assets/images/dest_tokyo_city_1791321400795.jpg'
+import goaImage from '../assets/images/dest_goa_beach.webp'
+import manaliImage from '../assets/images/dest_manali_mountain.webp'
+import jaipurImage from '../assets/images/dest_jaipur_palace.webp'
+import baliImage from '../assets/images/dest_bali_terrace.webp'
+import parisImage from '../assets/images/dest_paris_city.webp'
+import tokyoImage from '../assets/images/dest_tokyo_city.webp'
 
 export const heroTravelImage = hero1Mountain
 
