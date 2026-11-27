@@ -1,11 +1,15 @@
 {
   "name": "ai-trip-planner",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "PushpakUdaan: AI trip planner that generates day-by-day itineraries, budgets and hotel picks with Google Gemini",
   "type": "module",
+  "engines": {
+    "node": ">=20.12.0"
+  },
   "scripts": {
     "dev": "node server.js",
-    "start": "node server.js",
+    "start": "node server.js --production",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
